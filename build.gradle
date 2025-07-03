@@ -30,7 +30,9 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-devtools'
 	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.2'
+	implementation 'javax.persistence:javax.persistence-api:2.2'
 	//implementation 'jakarta.validation:jakarta.validation-api:3.0.2'
+	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-hibernate5'
 
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.h2database:h2'
