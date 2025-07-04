@@ -30,13 +30,13 @@ public class OrderRepository {
     public List<Order> findAll(OrderSearch orderSearch) {
 
         return em.createQuery("select o from Order o join o.member m" +
-            " where o.status = :status" +
-            " and m.name like :name", Order.class) // JPQL
-            .setParameter("status", orderSearch.getOrderStatus())
-            .setParameter("name", orderSearch.getMemberName())
-            //.setFirstResult(100) // 100번째부터 페이징할 때 쓰면 됨
-            .setMaxResults(1000) // 최대 1000건
-            .getResultList();
+                        " where o.status = :status" +
+                        " and m.name like :name", Order.class) // JPQL
+                .setParameter("status", orderSearch.getOrderStatus())
+                .setParameter("name", orderSearch.getMemberName())
+                //.setFirstResult(100) // 100번째부터 페이징할 때 쓰면 됨
+                .setMaxResults(1000) // 최대 1000건
+                .getResultList();
     }
 
     public List<Order> findAllByString(OrderSearch orderSearch) {
@@ -63,7 +63,7 @@ public class OrderRepository {
             }
             jpql += " m.name like :name";
         }
-        TypedQuery<Order> query = em.createQuery(jpql, Order.class) .setMaxResults(1000); //최대 1000건
+        TypedQuery<Order> query = em.createQuery(jpql, Order.class).setMaxResults(1000); //최대 1000건
         if (orderSearch.getOrderStatus() != null) {
             query = query.setParameter("status", orderSearch.getOrderStatus());
         }
@@ -98,10 +98,30 @@ public class OrderRepository {
     }
 
     public List<Order> findAllWithMemberDelivery() {
-       return  em.createQuery(
+        return em.createQuery(
                 "select o from Order o" +
                         " join fetch o.member m" +
                         " join fetch o.delivery d", Order.class
         ).getResultList();
+    }
+
+    public List<Order> findAllWithItem() {
+        return em.createQuery(
+                "select distinct o from Order o" +
+                        " join fetch o.member m" +
+                        " join fetch o.delivery d" +
+                        " join fetch o.orderItems oi" +
+                        " join fetch oi.item i", Order.class
+        ).getResultList();
+    }
+
+    public List<Order> findAllWithMemberDelivery(int offset, int limit) {
+        return em.createQuery(
+                "select o from Order o" +
+                        " join fetch o.member m" +
+                        " join fetch o.delivery d", Order.class
+        ).setFirstResult(offset)
+        .setMaxResults(limit)
+        .getResultList();
     }
 }
